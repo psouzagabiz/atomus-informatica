@@ -29,22 +29,20 @@ const PUBLIC_KEY = process.env.NEXT_PUBLIC_MERCADO_PAGO_PUBLIC_KEY;
 
 export type PaymentMethodOption = "PIX" | "CARTAO" | "BOLETO";
 
-// Nota: "debitCard" e "ticket" não aceitam "all"/"excluded" nesta conta do
-// Mercado Pago (só reconhecem IDs específicos de processadora, ex: "bolbradesco").
-// Por isso essas duas chaves ficam de fora — só controlamos creditCard/bankTransfer,
-// que aceitam os atalhos normalmente.
+// Nota: nesta conta do Mercado Pago, "bankTransfer"/"ticket"/"debitCard" não
+// aceitam os atalhos genéricos "all"/"excluded" — só reconhecem o ID literal
+// do método (ex: "pix", "bolbradesco"). Por isso especificamos apenas a
+// categoria que queremos habilitar em cada etapa, com o valor exato aceito,
+// e deixamos as demais de fora (a Brick não as exibe por omissão).
 const METHOD_CUSTOMIZATION: Record<PaymentMethodOption, Record<string, string>> = {
   PIX: {
-    creditCard: "excluded",
-    bankTransfer: "all",
+    bankTransfer: "pix",
   },
   CARTAO: {
     creditCard: "all",
-    bankTransfer: "excluded",
   },
   BOLETO: {
-    creditCard: "excluded",
-    bankTransfer: "excluded",
+    ticket: "bolbradesco",
   },
 };
 
