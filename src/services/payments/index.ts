@@ -1,5 +1,4 @@
 import type { CheckoutInput } from "@/lib/validations/payment";
-import { createMercadoPagoCheckout } from "./mercado-pago";
 import { createStripeCheckout } from "./stripe";
 import { createAsaasCheckout } from "./asaas";
 
@@ -8,13 +7,15 @@ export interface CheckoutResult {
   externalId: string;
 }
 
-// Ponto único de entrada para os provedores de pagamento.
-// Basta configurar as chaves em .env — nenhuma outra parte do
-// código precisa mudar ao trocar/adicionar um provedor.
+// Ponto único de entrada para os provedores de pagamento baseados em
+// redirecionamento (checkout hospedado pelo próprio gateway).
+//
+// O Mercado Pago é um caso à parte: usa o Payment Brick embutido na página
+// (ver src/components/sections/payment/mercado-pago-brick.tsx), que fala
+// diretamente com a rota /api/pagamentos/mercado-pago em vez de passar por
+// createCheckout.
 export async function createCheckout(input: CheckoutInput): Promise<CheckoutResult> {
   switch (input.provider) {
-    case "MERCADO_PAGO":
-      return createMercadoPagoCheckout(input);
     case "STRIPE":
       return createStripeCheckout(input);
     case "ASAAS":

@@ -20,6 +20,10 @@ export default async function PagamentoPage({
         eyebrow="Contratação"
         title="Falta pouco para o seu projeto começar"
         description="Escolha o plano, preencha seus dados e finalize o pagamento."
+        breadcrumbs={[
+          { label: "Início", href: "/" },
+          { label: "Pagamento", href: "/pagamento" },
+        ]}
       />
       <section className="py-16">
         <div className="container-atomus max-w-2xl">

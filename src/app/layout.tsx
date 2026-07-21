@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
@@ -10,6 +10,7 @@ import { WhatsappFloatButton } from "@/components/shared/whatsapp-float-button";
 import { BackToTopButton } from "@/components/shared/back-to-top-button";
 import { Toaster } from "@/components/ui/sonner";
 import { OrganizationJsonLd } from "@/components/shared/json-ld";
+import { CookieConsent } from "@/components/shared/cookie-consent";
 import { SITE_CONFIG } from "@/lib/constants";
 
 const geistSans = Geist({
@@ -60,6 +61,14 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
   alternates: { canonical: SITE_CONFIG.url },
+  manifest: "/manifest.webmanifest",
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#060b18" },
+  ],
 };
 
 export default function RootLayout({
@@ -87,6 +96,7 @@ export default function RootLayout({
             <Footer />
             <WhatsappFloatButton />
             <BackToTopButton />
+            <CookieConsent />
             <Toaster />
           </ThemeProvider>
         </SessionProvider>

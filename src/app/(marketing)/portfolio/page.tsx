@@ -15,6 +15,10 @@ export default function PortfolioPage() {
         eyebrow="Portfólio"
         title="Projetos que já colocamos no ar"
         description="Filtre por categoria para ver o tipo de projeto mais parecido com o que você precisa."
+        breadcrumbs={[
+          { label: "Início", href: "/" },
+          { label: "Portfólio", href: "/portfolio" },
+        ]}
       />
       <PortfolioGrid />
       <FinalCta />

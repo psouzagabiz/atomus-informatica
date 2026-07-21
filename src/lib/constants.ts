@@ -3,9 +3,9 @@ export const SITE_CONFIG = {
   description:
     "Desenvolvimento de sites, sistemas e lojas virtuais. Tecnologia, inovação e performance para o seu negócio.",
   url: "https://atomusinformatica.com.br",
-  whatsapp: "5500000000000", // TODO: substituir pelo número real com DDI+DDD
+  whatsapp: "5562920010434",
   email: "contato@atomusinformatica.com.br",
-  phone: "(00) 00000-0000", // TODO: substituir pelo telefone real
+  phone: "(62) 92001-0434",
   address: "A definir",
   social: {
     instagram: "https://instagram.com/atomusinformatica",
@@ -24,7 +24,7 @@ export function buildWhatsappLink(message: string = WHATSAPP_DEFAULT_MESSAGE) {
 
 // Gateway usado por padrão no checkout — altere para o provedor que você
 // configurar em produção (as chaves ficam em .env, ver services/payments/).
-export const DEFAULT_PAYMENT_PROVIDER = "ASAAS" as const;
+export const DEFAULT_PAYMENT_PROVIDER = "MERCADO_PAGO" as const;
 
 export const BUSINESS_HOURS = [
   { day: "Segunda a sexta", hours: "9h às 18h" },

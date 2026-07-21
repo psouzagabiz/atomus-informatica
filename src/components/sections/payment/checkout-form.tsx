@@ -3,7 +3,15 @@
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Barcode, CreditCard, Loader2, QrCode } from "lucide-react";
+import {
+  Barcode,
+  CheckCircle2,
+  Copy,
+  CreditCard,
+  ExternalLink,
+  Loader2,
+  QrCode,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -14,6 +22,7 @@ import { cn } from "@/lib/utils";
 import { DEFAULT_PAYMENT_PROVIDER, buildWhatsappLink } from "@/lib/constants";
 import { checkoutSchema, type CheckoutInput } from "@/lib/validations/payment";
 import { PLANS } from "@/lib/data/plans";
+import { MercadoPagoBrick, type MercadoPagoResult } from "./mercado-pago-brick";
 
 const currency = new Intl.NumberFormat("pt-BR", {
   style: "currency",
@@ -29,6 +38,7 @@ const PAYMENT_METHODS = [
 
 export function CheckoutForm({ initialPlan }: { initialPlan?: string }) {
   const [submitting, setSubmitting] = React.useState(false);
+  const [mpResult, setMpResult] = React.useState<MercadoPagoResult | null>(null);
 
   const {
     register,
@@ -57,6 +67,14 @@ export function CheckoutForm({ initialPlan }: { initialPlan?: string }) {
 
   const planSlug = watch("planSlug");
   const method = watch("method");
+  const customer = watch("customer");
+  const selectedPlan = PLANS.find((p) => p.slug === planSlug);
+  const isMercadoPago = DEFAULT_PAYMENT_PROVIDER === "MERCADO_PAGO";
+  const customerValid = checkoutSchema.shape.customer.safeParse(customer).success;
+
+  React.useEffect(() => {
+    setMpResult(null);
+  }, [method]);
 
   async function onSubmit(data: CheckoutInput) {
     setSubmitting(true);
@@ -92,7 +110,8 @@ export function CheckoutForm({ initialPlan }: { initialPlan?: string }) {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
+    <div className="space-y-10">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
       <div>
         <h2 className="text-lg font-semibold">1. Escolha o plano</h2>
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
@@ -217,10 +236,79 @@ export function CheckoutForm({ initialPlan }: { initialPlan?: string }) {
         </div>
       </div>
 
-      <Button type="submit" size="lg" variant="accent" className="w-full" disabled={submitting}>
-        {submitting && <Loader2 className="size-4 animate-spin" />}
-        Finalizar contratação
-      </Button>
+      {!isMercadoPago && (
+        <Button type="submit" size="lg" variant="accent" className="w-full" disabled={submitting}>
+          {submitting && <Loader2 className="size-4 animate-spin" />}
+          Finalizar contratação
+        </Button>
+      )}
     </form>
+
+    {isMercadoPago && selectedPlan && (
+      <div>
+        <h2 className="text-lg font-semibold">4. Pagamento</h2>
+        <div className="mt-4">
+          {mpResult?.status === "success" || mpResult?.status === "pending" ? (
+            <div className="rounded-xl border border-border p-6 text-center">
+              <CheckCircle2 className="mx-auto size-10 text-primary" />
+              <p className="mt-3 font-semibold">{mpResult.message}</p>
+
+              {mpResult.qrCodeBase64 && (
+                <div className="mt-5 flex flex-col items-center gap-3">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`data:image/png;base64,${mpResult.qrCodeBase64}`}
+                    alt="QR Code PIX"
+                    className="size-48 rounded-lg border border-border"
+                  />
+                  {mpResult.qrCode && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        navigator.clipboard.writeText(mpResult.qrCode!);
+                        toast.success("Código PIX copiado!");
+                      }}
+                    >
+                      <Copy className="size-4" /> Copiar código PIX
+                    </Button>
+                  )}
+                </div>
+              )}
+
+              {mpResult.ticketUrl && (
+                <Button className="mt-5" variant="outline" asChild>
+                  <a href={mpResult.ticketUrl} target="_blank" rel="noopener noreferrer">
+                    Abrir boleto <ExternalLink className="size-4" />
+                  </a>
+                </Button>
+              )}
+            </div>
+          ) : (
+            <>
+              {mpResult?.status === "error" && (
+                <p className="mb-4 text-sm text-destructive">{mpResult.message}</p>
+              )}
+              {customerValid ? (
+                <MercadoPagoBrick
+                  planSlug={planSlug}
+                  amount={selectedPlan.price}
+                  payerEmail={customer.email}
+                  payerDocument={customer.document}
+                  method={method}
+                  onResult={setMpResult}
+                />
+              ) : (
+                <p className="rounded-lg border border-dashed border-border p-4 text-sm text-muted-foreground">
+                  Preencha seus dados no passo 2 para liberar o pagamento.
+                </p>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+    )}
+    </div>
   );
 }

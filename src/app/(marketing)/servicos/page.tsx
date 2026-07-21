@@ -17,6 +17,10 @@ export default function ServicosPage() {
         eyebrow="Serviços"
         title="Tudo que a sua presença digital precisa"
         description="Do primeiro site até sistemas complexos — cada serviço com escopo, benefícios e prazo claros desde o início."
+        breadcrumbs={[
+          { label: "Início", href: "/" },
+          { label: "Serviços", href: "/servicos" },
+        ]}
       />
 
       <section className="py-24">

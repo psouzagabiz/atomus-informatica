@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/shared/reveal";
+import { Breadcrumbs } from "@/components/shared/breadcrumbs";
 import { PORTFOLIO_ITEMS } from "@/lib/data/portfolio";
 
 export function generateStaticParams() {
@@ -36,6 +38,13 @@ export default async function PortfolioDetailPage({
     <section className="py-24">
       <div className="container-atomus max-w-3xl">
         <Reveal>
+          <Breadcrumbs
+            items={[
+              { label: "Início", href: "/" },
+              { label: "Portfólio", href: "/portfolio" },
+              { label: project.title, href: `/portfolio/${project.slug}` },
+            ]}
+          />
           <Link
             href="/portfolio"
             className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground"
@@ -43,10 +52,21 @@ export default async function PortfolioDetailPage({
             <ArrowLeft className="size-4" /> Voltar ao portfólio
           </Link>
 
-          <div className="mt-6 flex aspect-video items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-accent">
-            <span className="px-6 text-center font-heading text-2xl font-semibold text-white/90">
-              {project.title}
-            </span>
+          <div className="relative mt-6 flex aspect-video items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-primary to-accent">
+            {project.image ? (
+              <Image
+                src={project.image}
+                alt={project.title}
+                fill
+                className="object-cover object-top"
+                sizes="(min-width: 1024px) 768px, 100vw"
+                priority
+              />
+            ) : (
+              <span className="px-6 text-center font-heading text-2xl font-semibold text-white/90">
+                {project.title}
+              </span>
+            )}
           </div>
 
           <p className="mt-6 text-sm font-medium uppercase tracking-wide text-accent">

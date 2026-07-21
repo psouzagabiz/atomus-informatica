@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -41,9 +42,19 @@ export function PortfolioGrid() {
             <Reveal key={project.slug} delay={(i % 3) * 0.06}>
               <Card className="group h-full overflow-hidden">
                 <div className="relative flex aspect-video items-center justify-center overflow-hidden bg-gradient-to-br from-primary to-accent">
-                  <span className="px-4 text-center font-heading text-lg font-semibold text-white/90">
-                    {project.title}
-                  </span>
+                  {project.image ? (
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      fill
+                      className="object-cover object-top"
+                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    />
+                  ) : (
+                    <span className="px-4 text-center font-heading text-lg font-semibold text-white/90">
+                      {project.title}
+                    </span>
+                  )}
                   <Link
                     href={`/portfolio/${project.slug}`}
                     aria-label={`Visualizar ${project.title}`}

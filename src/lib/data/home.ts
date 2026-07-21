@@ -92,27 +92,6 @@ export const DIFFERENTIALS = [
   },
 ] as const;
 
-export const PORTFOLIO_PREVIEW = [
-  {
-    slug: "ecommerce-modular",
-    title: "E-commerce Modular",
-    category: "Loja Virtual",
-    technologies: ["Next.js", "Stripe", "PostgreSQL"],
-  },
-  {
-    slug: "portal-institucional",
-    title: "Portal Institucional",
-    category: "Site Institucional",
-    technologies: ["Next.js", "Tailwind CSS"],
-  },
-  {
-    slug: "sistema-de-gestao",
-    title: "Sistema de Gestão Interna",
-    category: "Sistema Web",
-    technologies: ["Next.js", "Prisma", "PostgreSQL"],
-  },
-] as const;
-
 export const TESTIMONIALS = [
   {
     name: "Cliente Atomus",

@@ -1,10 +1,19 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { commentSchema } from "@/lib/validations/comment";
+import { getClientIp, rateLimit } from "@/lib/rate-limit";
 
 // Comentários entram como não aprovados (moderação manual) — ver BlogComment.approved
 // no schema do Prisma. Os posts precisam existir no banco (cadastrados via /admin/blog).
 export async function POST(request: Request) {
+  const { success } = rateLimit(`comentarios:${getClientIp(request)}`);
+  if (!success) {
+    return NextResponse.json(
+      { error: "Muitas tentativas. Aguarde um minuto e tente novamente." },
+      { status: 429 }
+    );
+  }
+
   const body = await request.json();
   const parsed = commentSchema.safeParse(body);
 

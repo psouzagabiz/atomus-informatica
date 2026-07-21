@@ -1,8 +1,17 @@
 import { NextResponse } from "next/server";
 import { budgetSchema } from "@/lib/validations/contact";
 import { prisma } from "@/lib/prisma";
+import { getClientIp, rateLimit } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
+  const { success } = rateLimit(`orcamento:${getClientIp(request)}`);
+  if (!success) {
+    return NextResponse.json(
+      { error: "Muitas tentativas. Aguarde um minuto e tente novamente." },
+      { status: 429 }
+    );
+  }
+
   const body = await request.json();
   const parsed = budgetSchema.safeParse(body);
 

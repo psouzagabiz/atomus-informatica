@@ -1,27 +1,35 @@
-import { Hero } from "@/components/sections/hero";
-import { Stats } from "@/components/sections/stats";
-import { Services } from "@/components/sections/services";
-import { DifferentialsSection } from "@/components/sections/differentials";
-import { PortfolioPreview } from "@/components/sections/portfolio-preview";
-import { Testimonials } from "@/components/sections/testimonials";
-import { SectorsMarquee } from "@/components/sections/sectors-marquee";
-import { Process } from "@/components/sections/process";
-import { Faq } from "@/components/sections/faq";
-import { FinalCta } from "@/components/sections/final-cta";
+import type { Metadata } from "next";
+import { PageHeader } from "@/components/shared/page-header";
+import { CheckoutForm } from "@/components/sections/payment/checkout-form";
 
-export default function Home() {
+export const metadata: Metadata = {
+  title: "Pagamento",
+  description: "Finalize a contratação do seu plano com a Atomus Informática.",
+};
+
+export default async function PagamentoPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ plano?: string }>;
+}) {
+  const { plano } = await searchParams;
+
   return (
     <>
-      <Hero />
-      <Stats />
-      <Services />
-      <DifferentialsSection />
-      <PortfolioPreview />
-      <Testimonials />
-      <SectorsMarquee />
-      <Process />
-      <Faq />
-      <FinalCta />
+      <PageHeader
+        eyebrow="Contratação"
+        title="Falta pouco para o seu projeto começar"
+        description="Escolha o plano, preencha seus dados e finalize o pagamento."
+        breadcrumbs={[
+          { label: "Início", href: "/" },
+          { label: "Pagamento", href: "/pagamento" },
+        ]}
+      />
+      <section className="py-16">
+        <div className="container-atomus max-w-2xl">
+          <CheckoutForm initialPlan={plano} />
+        </div>
+      </section>
     </>
   );
 }

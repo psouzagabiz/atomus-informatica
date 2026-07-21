@@ -19,6 +19,10 @@ export default function SobrePage() {
         eyebrow="Sobre a Atomus"
         title="Tecnologia com propósito"
         description="Somos uma equipe focada em transformar ideias em produtos digitais que realmente funcionam para o seu negócio."
+        breadcrumbs={[
+          { label: "Início", href: "/" },
+          { label: "Sobre", href: "/sobre" },
+        ]}
       />
       <Story />
       <MissionVisionValues />

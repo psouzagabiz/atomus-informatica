@@ -21,6 +21,10 @@ export default function ContatoPage() {
         eyebrow="Contato"
         title="Vamos conversar sobre o seu projeto"
         description="Preencha o formulário ou fale direto pelo WhatsApp — respondemos rápido."
+        breadcrumbs={[
+          { label: "Início", href: "/" },
+          { label: "Contato", href: "/contato" },
+        ]}
       />
 
       <section className="py-24">

@@ -15,6 +15,10 @@ export default function BlogPage() {
         eyebrow="Blog"
         title="Conteúdo para o seu negócio crescer online"
         description="Dicas práticas sobre tecnologia, marketing e vendas — sem enrolação."
+        breadcrumbs={[
+          { label: "Início", href: "/" },
+          { label: "Blog", href: "/blog" },
+        ]}
       />
       <BlogGrid />
     </>

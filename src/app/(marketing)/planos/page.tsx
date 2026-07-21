@@ -20,6 +20,10 @@ export default function PlanosPage() {
         eyebrow="Planos"
         title="O plano certo custa menos do que parece"
         description="Escolha o plano ideal para o seu momento — sem taxas escondidas, sem letras miúdas."
+        breadcrumbs={[
+          { label: "Início", href: "/" },
+          { label: "Planos", href: "/planos" },
+        ]}
       />
       <UrgencyBanner />
       <PricingCards />

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Calendar, Clock } from "lucide-react";
 import { Reveal } from "@/components/shared/reveal";
+import { Breadcrumbs } from "@/components/shared/breadcrumbs";
 import { ShareButtons } from "@/components/sections/blog/share-buttons";
 import { CommentsSection } from "@/components/sections/blog/comments-section";
 import { SITE_CONFIG } from "@/lib/constants";
@@ -63,6 +64,13 @@ export default async function BlogPostPage({
       />
       <div className="container-atomus max-w-2xl">
         <Reveal>
+          <Breadcrumbs
+            items={[
+              { label: "Início", href: "/" },
+              { label: "Blog", href: "/blog" },
+              { label: post.title, href: `/blog/${post.slug}` },
+            ]}
+          />
           <Link
             href="/blog"
             className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground"
